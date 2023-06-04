@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <title>Chatbot with {{message.capitalize()}}</title>
+  <style>
+    .chat-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .chat-container .chat-header {
+      background-color: #f8f9fa;
+      padding: 10px;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .chat-container .chat-body {
+      background-color: #f4eeee;
+      padding: 10px;
+      height: 400px;
+      overflow-y: auto;
+    }
+
+    .chat-container .chat-message {
+      margin-bottom: 10px;
+    }
+
+    .chat-container .user-message {
+      text-align: right;
+    }
+
+    .chat-container .bot-message {
+      text-align: left;
+    }
+
+    .chat-container .user-message .message-bubble {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .chat-container .bot-message .message-bubble {
+      background-color: #8eeab4df;
+      color: #000;
+    }
+
+    .chat-container .message-bubble {
+      padding: 8px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      max-width: 70%;
+    }
+
+    .chat-container .message-input {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    .chat-container .message-input input {
+      flex-grow: 1;
+      border-radius: 20px;
+      padding: 8px 12px;
+      border: 1px solid #ced4da;
+    }
+
+    .chat-container .message-input button {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container chat-container">
+    <div class="chat-header">
+      <h5 class="mb-0">Chatbot with {{message.capitalize()}}</h5>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="bot-message">
+        <div class="message-bubble">Merhaba! Size nasıl yardımcı olabilirim?</div>
+      </div>
+    </div>
+    <div class="message-input">
+      <input type="text" id="messageInput" placeholder="Mesajınızı yazın" name="user_message">
+      <button class="btn btn-primary" id="sendMessageBtn">Gönder</button>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script>
+    var chatHistory = [];
+
+    document.querySelector("#sendMessageBtn").addEventListener("click", function (event) {
+      event.preventDefault();
+
+      var messageInput = document.querySelector("#messageInput");
+      var messageText = messageInput.value.trim();
+
+      if (messageText !== "") {
+        var chatBody = document.querySelector("#chatBody");
+
+
+        // Kullanıcı mesajını ekle
+        var userMessageDiv = document.createElement("div");
+        userMessageDiv.classList.add("user-message");
+        var userMessageBubble = document.createElement("div");
+        userMessageBubble.classList.add("message-bubble");
+        userMessageBubble.textContent = messageText;
+        userMessageDiv.appendChild(userMessageBubble);
+        chatBody.appendChild(userMessageDiv);
+
+        // Kullanıcı mesajını sakla
+        chatHistory.push({
+          type: "user",
+          message: messageText
+        });
+
+        // Chatbot cevabını al
+
+
+
+        // fetch('/bot_response/' + messageText, {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json' // İçerik türünü JSON olarak belirtin
+        //   },
+        //   body: messageText // Veriyi JSON formatına dönüştürüp gövdeye (body) ekleyin
+        // }).then(
+        //   res => res.json())
+        //   .then(
+        //     data => {
+        //       botMessageBubble.textContent = data.message
+
+        //     })
+        // random number 1-25
+
+        var random = Math.floor(Math.random() * 25) + 1;
+        fetch('https://jsonplaceholder.typicode.com/comments/' + random)
+          .then(response => response.json())
+          .then(json => {
+            botMessageBubble.textContent = json.body
+          })
+
+        // get bot response from fetch request that returns a promise
+
+
+        // Chatbot cevabını ekle
+        var botMessageDiv = document.createElement("div");
+        botMessageDiv.classList.add("bot-message");
+        var botMessageBubble = document.createElement("div");
+        botMessageBubble.classList.add("message-bubble");
+        // botMessageBubble.textContent = botResponse;
+        botMessageDiv.appendChild(botMessageBubble);
+        chatBody.appendChild(botMessageDiv);
+
+        // Chatbot cevabını sakla
+        chatHistory.push({
+          type: "bot",
+          message: botMessageBubble.textContent
+        });
+
+        // Mesaj girdiğinden sonra input alanını temizle
+        messageInput.value = "";
+        
+        // Chatbot cevabı geldikten sonra en aşağıya kaydır
+
+
+      }
+
+    });
+
+
+
+    // Chatbot cevabını döndüren fonksiyon (örnek olarak sabit bir cevap döndürüyor)
+
+  </script>
+</body>
+
+</html>
